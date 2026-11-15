@@ -1,0 +1,26 @@
+name: cv_reader_app
+description: تطبيق لإنشاء السيرة الذاتية وتحويلها إلى PDF وقراءة ملفات PDF.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  cupertino_icons: ^1.0.8
+  pdf: ^3.11.1
+  printing: ^5.13.1
+  pdfrx: ^2.0.0
+  file_picker: ^8.1.2
+  path_provider: ^2.1.4
+  shared_preferences: ^2.3.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/fonts/
