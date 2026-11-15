@@ -12,13 +12,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # الرفع من الهاتف يضع الملفات في الجذر. هذه الخطوة ترتّبها في مجلداتها:
-      # 1) الأسماء القديمة (main.dart ...) تُنقل لأماكنها
-      # 2) أي ملف اسمه يحوي "__" يُحوَّل إلى مسار، مثال:
-      #    lib__screens__cv_screen.dart  ->  lib/screens/cv_screen.dart
-      #    (وتتفوق النسخة الجديدة على القديمة)
       - name: Organize flat files into folders
         run: |
+          echo "user: $(id -un) | dir: $(pwd)"
+          ls -la
+          sudo chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE:-.}" || true
           mkdir -p lib/models lib/services lib/screens assets/fonts
           [ -f main.dart ] && mv main.dart lib/main.dart || true
           [ -f cv_data.dart ] && mv cv_data.dart lib/models/ || true
@@ -66,8 +64,6 @@ jobs:
       - name: Set app label
         run: sed -i 's|android:label="[^"]*"|android:label="سيرتي"|' android/app/src/main/AndroidManifest.xml
 
-      # 1) بعض الإضافات تُترجم على Android 34 بينما تعتمد عليها مكتبات تطلب 36
-      # 2) تعطيل فحص Lint الذي ينهار أثناء بناء release ولا يؤثر على الـ APK
       - name: Gradle fixes (compileSdk and lint)
         run: |
           mkdir -p ~/.gradle/init.d
