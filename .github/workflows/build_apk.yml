@@ -23,15 +23,22 @@ jobs:
           for f in pdf_service recent_service; do
             [ -f $f.dart ] && mv $f.dart lib/services/ || true
           done
-          for f in home_screen cv_screen reader_screen saved_files_screen; do
+          for f in home_screen cv_screen reader_screen saved_files_screen writer_screen; do
             [ -f $f.dart ] && mv $f.dart lib/screens/ || true
           done
           [ -f .gitkeep ] && mv .gitkeep assets/fonts/ || true
           for f in *__*; do
             [ -f "$f" ] || continue
-            dest="${f//__//}"
+            name="$f"
+            while [ "${name#_}" != "$name" ]; do name="${name#_}"; done
+            dest="${name//__//}"
+            case "$dest" in
+              lib/*|assets/*) ;;
+              *) echo "skip: $f"; continue ;;
+            esac
             mkdir -p "$(dirname "$dest")"
             mv -f "$f" "$dest"
+            echo "moved: $f -> $dest"
           done
           ls -R lib
 
